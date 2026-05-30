@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Geometric Temple — WebGPU & Web Audio Experience</title>
+  <meta name="description" content="Una experiencia sensorial interactiva y generativa en tiempo real implementada con WebGPU y Web Audio API.">
+  <link rel="stylesheet" href="./styles/main.css">
+  <!-- Modern aesthetic typography from Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+  <script>
+    // Sistema global de captura de errores para diagnóstico en pantalla
+    function showGlobalError(title, message, stack) {
+      if (document.getElementById('global-error-overlay')) return;
+      const errorDiv = document.createElement('div');
+      errorDiv.id = 'global-error-overlay';
+      errorDiv.style.position = 'fixed';
+      errorDiv.style.top = '0';
+      errorDiv.style.left = '0';
+      errorDiv.style.width = '100vw';
+      errorDiv.style.height = '100vh';
+      errorDiv.style.background = 'rgba(28, 5, 5, 0.98)';
+      errorDiv.style.color = '#ff6b6b';
+      errorDiv.style.fontFamily = 'monospace';
+      errorDiv.style.padding = '30px';
+      errorDiv.style.overflow = 'auto';
+      errorDiv.style.zIndex = '999999';
+      errorDiv.style.boxSizing = 'border-box';
+      
+      errorDiv.innerHTML = `
+        <h1 style="color:#ff3333;margin-top:0;font-size:22px;border-bottom:2px solid #551111;padding-bottom:10px;font-family:sans-serif;">⚠️ ERROR DE SISTEMA DETECTADO</h1>
+        <p style="font-weight:bold;font-size:15px;margin-bottom:8px;">[${title}]</p>
+        <pre style="white-space:pre-wrap;background:#150202;padding:20px;border:1px solid #441111;border-radius:6px;color:#ffcccc;font-size:13px;line-height:1.5;font-family:monospace;">${message}${stack ? '\\n\\nStack:\\n' + stack : ''}</pre>
+        <p style="color:#888888;margin-top:20px;font-family:sans-serif;">Por favor, haz una captura de esta pantalla o copia su contenido para que podamos solucionarlo de inmediato.</p>
+      `;
+      document.body.appendChild(errorDiv);
+    }
+
+    window.addEventListener('error', function(e) {
+      showGlobalError('Excepción de JS en Tiempo de Ejecución', e.message || String(e), e.error ? e.error.stack : null);
+    });
+
+    window.addEventListener('unhandledrejection', function(e) {
+      showGlobalError('Rechazo de Promesa Asíncrona (WebGPU/Audio)', e.reason ? (e.reason.message || String(e.reason)) : 'Desconocido', e.reason ? e.reason.stack : null);
+    });
+  </script>
+  <canvas id="gl-canvas"></canvas>
+
+  <!-- Premium Glassmorphic Intro Overlay to trigger AudioContext -->
+  <div id="intro-overlay" class="intro-overlay">
+    <div class="intro-card">
+      <h1 class="intro-title">GEOMETRIC TEMPLE</h1>
+      <div class="intro-divider"></div>
+      <p class="intro-subtitle">Una experiencia audiovisual generativa en tiempo real</p>
+      <button id="start-btn" class="start-btn">INICIAR VIAJE</button>
+      <span class="compatibility-notice">Requiere un navegador compatible con WebGPU (Chrome 113+, Safari 18+)</span>
+    </div>
+  </div>
+
+  <!-- Dynamic floating prompt during PhaseTemple walkthrough -->
+  <div id="temple-prompt" class="temple-prompt">MANTÉN PULSADO EL TEMPLO PARA AVANZAR</div>
+
+  <!-- Sound Modulation Panel UI (Collapsible Sidebar) -->
+  <div id="audio-panel-toggle" class="audio-panel-toggle hidden">
+    <svg viewBox="0 0 24 24" width="22" height="22">
+      <path d="M12 3v18M17 7v10M22 10v4M7 9v6M2 12v0" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div id="audio-modulation-panel" class="audio-modulation-panel hidden">
+    <div class="audio-panel-header">
+      <h3>Modulación de Sonido</h3>
+      <button id="audio-panel-close" class="audio-panel-close">&times;</button>
+    </div>
+    <div class="audio-panel-divider"></div>
+    <div class="audio-panel-body">
+      <!-- Master Control -->
+      <div class="control-group">
+        <label for="slider-master-volume">Volumen General <span id="val-master-volume">42%</span></label>
+        <input type="range" id="slider-master-volume" min="0" max="100" value="42">
+      </div>
+      
+      <!-- Reverb Control -->
+      <div class="control-group">
+        <label for="slider-reverb-mix">Reverberación <span id="val-reverb-mix">45%</span></label>
+        <input type="range" id="slider-reverb-mix" min="0" max="100" value="45">
+      </div>
+
+      <!-- Void / Temple Bass Drone -->
+      <div class="control-group" id="grp-bass-drone">
+        <label for="slider-bass-volume">Zumbido Base <span id="val-bass-volume">15%</span></label>
+        <input type="range" id="slider-bass-volume" min="0" max="100" value="15">
+      </div>
+
+      <!-- Core Spatial Chords -->
+      <div class="control-group" id="grp-core-chords">
+        <label for="slider-core-volume">Acordes Catedral <span id="val-core-volume">20%</span></label>
+        <input type="range" id="slider-core-volume" min="0" max="100" value="20">
+      </div>
+
+      <!-- Dunes Wind Volume -->
+      <div class="control-group" id="grp-dunes-wind">
+        <label for="slider-wind-volume">Viento Realista <span id="val-wind-volume">38%</span></label>
+        <input type="range" id="slider-wind-volume" min="0" max="100" value="38">
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
