@@ -2,10 +2,9 @@
 
 > **Una experiencia interactiva y narrativa construida desde cero con WebGPU, Raymarching de Campos de Distancia Signada (SDF) y diseño sonoro procedimental.**
 
-🔗 **[Jugar / Ver Demo en Vivo](https://pepeamoedo.com/GEOMETRICTEMPLE/)** *(Sustituye este enlace por la URL exacta si cambia)*
+🔗 **[Jugar / Ver Demo en Vivo](https://pepeamoedo.com/GEOMETRICTEMPLE/)**
 
-![Geometric Temple Cover](https://via.placeholder.com/800x400/0A0A0C/FFFFFF?text=Captura+de+pantalla+del+Templo+o+GIF+animado)
-*(Recomendación: Sube un GIF corto o una captura de pantalla del templo a la carpeta del repositorio y sustituye este enlace de arriba)*
+<img width="1010" height="843" alt="image" src="https://github.com/user-attachments/assets/e8799f02-b919-48a3-be4d-6fe53c9c1262" />
 
 ## 👁️ La Experiencia
 
